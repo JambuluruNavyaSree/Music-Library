@@ -170,18 +170,6 @@ const PlaylistDetail = () => {
           <button className="btn btn-primary" style={{ gap: '8px' }} onClick={playAll}>
             <FiPlay /> Play All
           </button>
-          <button
-            onClick={playAllShuffled}
-            style={{ background: isShuffle ? 'rgba(139,92,246,0.2)' : 'rgba(255,255,255,0.06)', border: '1px solid rgba(139,92,246,0.3)', color: isShuffle ? 'var(--accent-light)' : 'white', padding: '10px 20px', borderRadius: '100px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 600, fontSize: '14px', transition: 'all 0.2s' }}
-          >
-            <FiShuffle /> Shuffle
-          </button>
-          <button
-            onClick={toggleRepeat}
-            style={{ background: isRepeat ? 'rgba(139,92,246,0.2)' : 'rgba(255,255,255,0.06)', border: '1px solid rgba(139,92,246,0.3)', color: isRepeat ? 'var(--accent-light)' : 'white', padding: '10px 20px', borderRadius: '100px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 600, fontSize: '14px', transition: 'all 0.2s' }}
-          >
-            <FiRepeat /> Repeat {isRepeat ? 'On' : 'Off'}
-          </button>
           {currentSong && (
             <button
               onClick={togglePlay}
