@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API = axios.create({ baseURL: 'https://music-library-c83z.onrender.com/api' });
+const API = axios.create({ baseURL: '/api' });
 
 API.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');

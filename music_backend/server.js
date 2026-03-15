@@ -17,23 +17,8 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // Serve static files from the frontend build folder
 app.use(express.static(path.join(__dirname, '../music_frontend/build')));
 
-// Root Route
-app.get('/', (req, res) => {
-  res.send('Music Library API is running...');
-});
-
-// API Routes
-app.use('/api/auth',require('./routes/auth'));
-app.use('/api/songs',require('./routes/songs'));
-app.use('/api/playlists',require('./routes/playlists'));
-app.use('/api/notifications', require('./routes/notifications'));
-app.use('/api/artists',require('./routes/artists'));
-app.use('/api/directors',require('./routes/directors'));
-app.use('/api/albums',require('./routes/albums'));
-app.use('/api/users', require('./routes/users'));
-
 // Catch-all route to serve the frontend's index.html
-app.get('*', (req, res) => {
+app.get('(.*)', (req, res) => {
   res.sendFile(path.join(__dirname, '../music_frontend/build', 'index.html'));
 });
 
