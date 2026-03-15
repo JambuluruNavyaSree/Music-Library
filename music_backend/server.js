@@ -2,6 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
+const http = require('http');
+const { WebSocketServer } = require('ws');
 require('dotenv').config();
 
 const app = express();
@@ -22,29 +24,26 @@ app.use('/api/directors',require('./routes/directors'));
 app.use('/api/albums',require('./routes/albums'));
 app.use('/api/users', require('./routes/users'));
 
-// if (require.main === module) {
-//   mongoose.connect(process.env.MONGO_URI)
-//     .then(() => {
-//       console.log('MongoDB connected');
-//       app.listen(process.env.PORT, () =>
-//         console.log(`Server running on port ${process.env.PORT}`)
-//       );
-//     })
-//     .catch(err => console.log(err));
-// }
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+// Basic WebSocket initialization (placeholder since original logic was missing)
+function initWebSocket(wss) {
+  wss.on('connection', (ws) => {
+    console.log('Client connected to WebSocket');
+    ws.on('close', () => console.log('Client disconnected from WebSocket'));
+  });
+}
 
 const server = http.createServer(app);
-
 const wss = new WebSocketServer({ server });
 initWebSocket(wss);
 
-server.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-  console.log(`WebSocket server is ready`);
-});
-// module.exports = app;
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log('MongoDB connected');
+    server.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+      console.log(`WebSocket server is ready`);
+    });
+  })
+  .catch(err => console.error('MongoDB connection error:', err));
