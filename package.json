@@ -1,9 +1,4 @@
 {
-  "scripts": {
-    "install:all": "npm install --prefix music_backend && npm install --prefix music_frontend",
-    "build:frontend": "npm run build --prefix music_frontend",
-    "start:backend": "npm start --prefix music_backend"
-  },
   "dependencies": {
     "http-node": "^1.2.0",
     "isomorphic-git": "^1.37.4"
