@@ -2,8 +2,6 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
-const http = require('http');
-const { WebSocketServer } = require('ws');
 require('dotenv').config();
 
 const app = express();
@@ -31,3 +29,5 @@ mongoose.connect(process.env.MONGO_URI)
     });
   })
   .catch(err => console.error('MongoDB connection error:', err));
+
+  
