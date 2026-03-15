@@ -1,0 +1,48 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Uploads (binary media files)
+music_backend/uploads/
+
+# Cypress log files
+music_frontend/cypress_*.log
+music_frontend/cypress_utf8*.log
+
+# Push script
+push_to_github.js
+package-lock.json
+
+# Testing
+coverage/
+
+# Production
+build/
+dist/
+
+# Misc
+.DS_Store
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Backend specific
+music_backend/node_modules/
+music_backend/.env
+
+# Frontend specific
+music_frontend/node_modules/
+music_frontend/.env

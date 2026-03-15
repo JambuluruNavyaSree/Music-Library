@@ -1,0 +1,25 @@
+.songs-page { animation: fadeIn 0.3s ease; }
+
+.songs-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.songs-toolbar .search-bar { flex: 1; min-width: 260px; }
+
+.active-filter { border-color: var(--accent) !important; color: var(--accent) !important; }
+
+.filter-bar { margin-bottom: 16px; }
+.filter-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.song-card-meta { margin-top: 6px; }
+
+@media (max-width: 768px) {
+  .filter-row { grid-template-columns: 1fr; }
+}

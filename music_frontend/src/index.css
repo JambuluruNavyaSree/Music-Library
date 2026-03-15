@@ -1,0 +1,352 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Syne:wght@700;800&display=swap');
+
+:root {
+  --glass-bg: rgba(255, 255, 255, 0.07);
+  --glass-border: rgba(255, 255, 255, 0.14);
+  --glass-shadow: rgba(0, 0, 0, 0.3);
+  --blur: 20px;
+  
+  --bg-primary: #060818;
+  --bg-card: rgba(255, 255, 255, 0.04);
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.6);
+  --text-muted: rgba(255, 255, 255, 0.35);
+  
+  --accent: #6c3dd3;
+  --accent2: #0ea5e9;
+  --accent-light: #a78bfa;
+  --accent-gradient: linear-gradient(135deg, #6c3dd3, #0ea5e9);
+  
+  --success: #10b981;
+  --danger: #f43f8e;
+
+  --border: rgba(255, 255, 255, 0.08);
+  --border-light: rgba(255, 255, 255, 0.12);
+  --radius: 20px;
+  
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  
+  --nav-height: 76px;
+  --player-height: 90px;
+}
+
+/* Base resets */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ─── Animated Orb Background ─── */
+.bg-orbs {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.5;
+  animation: drift 20s ease-in-out infinite alternate;
+}
+
+.orb-1 {
+  width: 600px; height: 600px;
+  background: var(--accent);
+  top: -150px; left: -100px;
+  animation-delay: 0s;
+}
+
+.orb-2 {
+  width: 500px; height: 500px;
+  background: #0ea5e9;
+  bottom: -100px; right: -50px;
+  animation-delay: -5s;
+}
+
+.orb-3 {
+  width: 400px; height: 400px;
+  background: #f43f8e;
+  top: 30%; right: 10%;
+  animation-delay: -10s;
+}
+
+.orb-4 {
+  width: 300px; height: 300px;
+  background: #10b981;
+  bottom: 20%; left: 15%;
+  animation-delay: -15s;
+}
+
+@keyframes drift {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(50px, 40px) scale(1.1); }
+  100% { transform: translate(-40px, 30px) scale(0.95); }
+}
+
+/* ─── Glassmorphism Utilities ─── */
+.glass {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+  box-shadow: 0 8px 32px var(--glass-shadow);
+}
+
+/* ─── KEY FIX: z-index: 100 here, modal is 9999 — modal always wins ─── */
+.glass-nav {
+  background: rgba(6, 8, 24, 0.85);
+  border-bottom: 1px solid var(--glass-border);
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  border-radius: 24px;
+  padding: 24px;
+  transition: all 0.3s ease;
+}
+
+.glass-card:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.15);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* ─── Typography ─── */
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.text-gradient {
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+/* ─── Layout ─── */
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  padding: 100px 24px 120px;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ─── Buttons ─── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 100px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+  font-family: var(--font-body);
+}
+
+.btn-primary {
+  background: var(--accent-gradient);
+  color: white;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(108, 61, 211, 0.4);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+  border: 1px solid var(--glass-border);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* ─── Forms ─── */
+.glass-input {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
+  border-radius: 14px;
+  padding: 12px 18px;
+  color: white;
+  font-family: var(--font-body);
+  transition: all 0.2s;
+  outline: none;
+}
+
+.glass-input:focus {
+  border-color: var(--accent-light);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 0 4px rgba(167, 139, 250, 0.15);
+}
+
+/* ─── Scrollbar ─── */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* ─── Animations ─── */
+.fade-in {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Utility ─── */
+.hidden { display: none !important; }
+
+.btn-sm { padding: 8px 16px !important; font-size: 12px !important; }
+
+/* Spinner */
+.spinner {
+  width: 40px; height: 40px;
+  border: 3px solid rgba(255,255,255,0.1);
+  border-top-color: var(--accent-light);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.loading-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 80px 20px;
+}
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 100px 20px;
+  color: var(--text-muted);
+}
+.empty-state-icon { font-size: 48px; margin-bottom: 16px; }
+.empty-state h3 { color: white; margin-bottom: 8px; }
+
+/* Hover glass */
+.hover-glass {
+  transition: background 0.2s, border-color 0.2s;
+}
+.hover-glass:hover {
+  background: rgba(255, 255, 255, 0.06) !important;
+}
+
+/* Song card play button overlay */
+.song-card-play { opacity: 0; transition: opacity 0.25s; }
+.song-card:hover .song-card-play { opacity: 1; }
+.song-card-thumb { position: relative; }
+
+/* Song / playlist card helpers */
+.song-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.song-card:hover {
+  background: rgba(255,255,255,0.07);
+  border-color: rgba(255,255,255,0.15);
+  transform: translateY(-2px);
+}
+.song-card-title { font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+.song-card-sub { font-size: 12px; color: var(--text-secondary); }
+.playlist-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    padding-top: 80px;
+    padding-bottom: 140px;
+  }
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  backdrop-filter: blur(2px);
+  z-index: 9999;
+  display: flex;
+  align-items: flex-start;           /* ← changed from center */
+  justify-content: center;
+  padding-top: calc(var(--nav-height)-20);  /* ← pushes modal below navbar */
+  padding-left: 24px;
+  padding-right: 24px;
+  padding-bottom: 24px;
+  animation: fadeInModal 0.3s ease-out;
+}
+.modal {
+  background: rgba(15, 18, 42, 0.95);
+  border: 1px solid var(--glass-border);
+  padding: 40px;
+  border-radius: 32px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
+  position: relative;
+}
+
+@keyframes fadeInModal {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
