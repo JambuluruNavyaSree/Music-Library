@@ -76,3 +76,18 @@ exports.uploadSongWithCover = multer({
   { name: 'songFile',    maxCount: 1 },
   { name: 'coverImage',  maxCount: 1 }
 ]);
+
+// Album cover upload
+const albumCoverStorage = createStorage('covers', (req) => {
+  return req.body.albumName
+    ? req.body.albumName.trim().replace(/\s+/g, '_')
+    : 'album';
+});
+
+exports.uploadAlbumCover = multer({
+  storage: albumCoverStorage,
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) cb(null, true);
+    else cb(new Error('Cover must be an image file'), false);
+  }
+}).single('coverImage');

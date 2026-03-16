@@ -2,7 +2,18 @@ const mongoose = require('mongoose');
 const Album = require('../models/Album');
 const directorService = require('./directorService');
 
-const getAllAlbums = async () => await Album.find().populate('directorId');
+const getAllAlbums = async () => {
+  const albums = await Album.find().populate('directorId');
+  return albums.map(a => {
+    const obj = a.toObject();
+    if (obj.coverImage) {
+      const ci = obj.coverImage.replace(/\\/g, '/');
+      const cleanCI = ci.startsWith('/') ? ci : `/${ci}`;
+      obj.coverImage = encodeURI(cleanCI);
+    }
+    return obj;
+  });
+};
 
 const findOrCreateAlbum = async (albumName, directorName) => {
   if (!albumName) return null;
@@ -25,7 +36,7 @@ const findOrCreateAlbum = async (albumName, directorName) => {
   return album;
 };
 
-const addAlbum = async (data) => {
+const addAlbum = async (data, coverImagePath) => {
   const isValidId = (val) => mongoose.Types.ObjectId.isValid(val) && /^[0-9a-fA-F]{24}$/.test(val);
   let directorId = data.directorId;
 
@@ -42,11 +53,11 @@ const addAlbum = async (data) => {
     albumName: data.albumName,
     releaseDate: data.releaseDate,
     directorId: directorId,
-    coverImage: data.coverImage
+    coverImage: coverImagePath ? `/${coverImagePath.replace(/\\/g, '/')}` : (data.coverImage || null)
   });
 };
 
-const updateAlbum = async (id, data) => {
+const updateAlbum = async (id, data, coverImagePath) => {
   const isValidId = (val) => mongoose.Types.ObjectId.isValid(val) && /^[0-9a-fA-F]{24}$/.test(val);
   let directorId = data.directorId;
 
@@ -59,13 +70,12 @@ const updateAlbum = async (id, data) => {
 
   console.log('[updateAlbum] Resolved directorId:', directorId);
 
-  // Use explicit update object to avoid passing string names to the model
   const updateFields = {
     albumName: data.albumName,
     releaseDate: data.releaseDate,
-    coverImage: data.coverImage,
     directorId: directorId
   };
+  if (coverImagePath) updateFields.coverImage = `/${coverImagePath.replace(/\\/g, '/')}`;
 
   const album = await Album.findByIdAndUpdate(id, updateFields, { new: true });
   if (!album) throw new Error('Album not found');

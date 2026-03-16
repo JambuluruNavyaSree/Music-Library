@@ -68,25 +68,32 @@ const Albums = () => {
               onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-4px)'}
               onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
             >
-              {/* Disc circle */}
+              {/* Disc circle or Cover Image */}
               <div style={{
-                width: '100px', height: '100px', borderRadius: '50%',
-                background: 'var(--accent-gradient)',
+                width: '120px', height: '120px', borderRadius: '50%',
+                background: album.coverImage ? 'none' : 'var(--accent-gradient)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 margin: '0 auto 20px',
-                fontSize: '36px', fontWeight: '800', color: 'white',
-                boxShadow: '0 8px 24px rgba(139,92,246,0.4)',
+                fontSize: '40px', fontWeight: '800', color: 'white',
+                boxShadow: '0 12px 32px rgba(0,0,0,0.4)',
                 position: 'relative',
-                overflow: 'hidden'
+                overflow: 'hidden',
+                border: '4px solid rgba(255,255,255,0.05)'
               }}>
-                <FiDisc />
-                {/* Vinyl record effect */}
-                <div style={{
-                  position: 'absolute', inset: '15%', border: '4px solid rgba(255,255,255,0.1)',
-                  borderRadius: '50%', pointerEvents: 'none'
-                }} />
+                {album.coverImage ? (
+                  <img src={album.coverImage} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                ) : (
+                  <>
+                    <FiDisc />
+                    {/* Vinyl record effect */}
+                    <div style={{
+                      position: 'absolute', inset: '15%', border: '4px solid rgba(255,255,255,0.1)',
+                      borderRadius: '50%', pointerEvents: 'none'
+                    }} />
+                  </>
+                )}
               </div>
-              <div style={{ fontWeight: '700', fontSize: '16px', marginBottom: '6px', wordBreak: 'break-word' }}>
+              <div style={{ fontWeight: '700', fontSize: '17px', marginBottom: '6px', wordBreak: 'break-word', color: 'white' }}>
                 {album.albumName}
               </div>
               <div style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>

@@ -4,7 +4,7 @@ import { FiPlus, FiEdit2, FiTrash2, FiSearch, FiCalendar, FiActivity, FiX } from
 import toast from 'react-hot-toast';
 import Modal from '../components/Modal.js';
 
-const emptyForm = { albumName: '', releaseDate: '', directorId: '' };
+const emptyForm = { albumName: '', releaseDate: '', directorId: '', coverFile: null };
 
 const AdminAlbums = () => {
   const [albums, setAlbums] = useState([]);
@@ -33,7 +33,8 @@ const AdminAlbums = () => {
     setForm({
       albumName: album.albumName,
       releaseDate: album.releaseDate ? album.releaseDate.slice(0, 10) : '',
-      directorId: album.directorId?.directorName || ''
+      directorId: album.directorId?.directorName || '',
+      coverFile: null
     });
     setShowModal(true);
   };
@@ -42,12 +43,18 @@ const AdminAlbums = () => {
     if (!form.albumName.trim()) { toast.error('Album name is required'); return; }
     setSaving(true);
     try {
+      const fd = new FormData();
+      fd.append('albumName', form.albumName);
+      if (form.releaseDate) fd.append('releaseDate', form.releaseDate);
+      if (form.directorId) fd.append('directorId', form.directorId);
+      if (form.coverFile) fd.append('coverImage', form.coverFile);
+
       if (editTarget) {
-        const { data } = await updateAlbum(editTarget._id, form);
+        const { data } = await updateAlbum(editTarget._id, fd);
         setAlbums(a => a.map(x => x._id === editTarget._id ? data : x));
         toast.success('Album updated');
       } else {
-        const { data } = await createAlbum(form);
+        const { data } = await createAlbum(fd);
         setAlbums(a => [...a, data]);
         toast.success('Album created');
       }
@@ -94,6 +101,7 @@ const AdminAlbums = () => {
             <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
               <thead style={{ background: 'rgba(255,255,255,0.03)', borderBottom: '1px solid var(--glass-border)' }}>
                 <tr>
+                  <th style={{ padding: '20px 24px', fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)' }}>Cover</th>
                   <th style={{ padding: '20px 24px', fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)' }}>Album Title</th>
                   <th style={{ padding: '20px 24px', fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)' }}>Music Director</th>
                   <th style={{ padding: '20px 24px', fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)' }}>Release Date</th>
@@ -102,9 +110,14 @@ const AdminAlbums = () => {
               </thead>
               <tbody>
                 {filtered.length === 0 ? (
-                  <tr><td colSpan={4} style={{ textAlign: 'center', padding: '64px', color: 'var(--text-muted)' }}>No albums found</td></tr>
+                  <tr><td colSpan={5} style={{ textAlign: 'center', padding: '64px', color: 'var(--text-muted)' }}>No albums found</td></tr>
                 ) : filtered.map(album => (
                   <tr key={album._id} style={{ borderBottom: '1px solid rgba(255,255,255,0.03)' }}>
+                    <td style={{ padding: '20px 24px' }}>
+                      <div style={{ width: '40px', height: '40px', borderRadius: '8px', overflow: 'hidden', background: 'rgba(255,255,255,0.05)' }}>
+                        {album.coverImage ? <img src={album.coverImage} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: 0.3 }}><FiImage /></div>}
+                      </div>
+                    </td>
                     <td style={{ padding: '20px 24px' }}>
                       <div style={{ fontWeight: '700', fontSize: '15px' }}>{album.albumName}</div>
                     </td>
@@ -150,14 +163,30 @@ const AdminAlbums = () => {
               </div>
             </div>
 
-            <div className="form-group">
-              <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '600', marginLeft: '4px' }}>Release Date</label>
-              <div style={{ position: 'relative' }}>
-                <FiCalendar style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', opacity: 0.5, pointerEvents: 'none' }} />
-                <input 
-                  type="date" className="glass-input" style={{ width: '100%', paddingLeft: '44px' }}
-                  value={form.releaseDate} onChange={e => setForm({ ...form, releaseDate: e.target.value })}
-                />
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+              <div className="form-group">
+                <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '600', marginLeft: '4px' }}>Release Date</label>
+                <div style={{ position: 'relative' }}>
+                  <FiCalendar style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', opacity: 0.5, pointerEvents: 'none' }} />
+                  <input 
+                    type="date" className="glass-input" style={{ width: '100%', paddingLeft: '44px' }}
+                    value={form.releaseDate} onChange={e => setForm({ ...form, releaseDate: e.target.value })}
+                  />
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '600', marginLeft: '4px' }}>Cover Image (Opt)</label>
+                <div className="glass-input" style={{ position: 'relative', display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+                  <FiImage style={{ marginRight: '12px', opacity: 0.5, flexShrink: 0 }} />
+                  <span style={{ fontSize: '13px', color: form.coverFile ? 'white' : 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {form.coverFile ? form.coverFile.name : 'Select cover...'}
+                  </span>
+                  <input type="file" accept="image/*" 
+                    onChange={e => setForm({ ...form, coverFile: e.target.files[0] })}
+                    style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer' }} 
+                  />
+                </div>
               </div>
             </div>
 
