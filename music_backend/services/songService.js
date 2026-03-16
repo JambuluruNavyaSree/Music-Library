@@ -5,6 +5,7 @@ const User = require('../models/User');
 const Artist = require('../models/Artist');
 const directorService = require('./directorService');
 const albumService = require('./albumService');
+const Album = require('../models/Album');
 
 // Find or create an artist by name
 const findOrCreateArtist = async (name) => {
@@ -48,7 +49,12 @@ const resolveMetadata = async (data) => {
 
   // If a photo was uploaded, update the director
   if (directorId && data.directorPhotoPath) {
-    await directorService.updateDirectorPhoto(directorId, data.directorPhotoPath);
+    try {
+      await directorService.updateDirectorPhoto(directorId, data.directorPhotoPath);
+    } catch (err) {
+      console.error('Failed to update director photo:', err);
+      // Don't throw, let the song save continue
+    }
   }
 
   // 2. Resolve Album
@@ -178,7 +184,6 @@ const addSong = async (body, filePath, coverImagePath, directorPhotoPath, adminU
 
   // If album doesn't have a cover, use this song's cover as a sticky fallback
   if (coverImagePath) {
-    const Album = require('../models/Album');
     await Album.findByIdAndUpdate(albumId, { $setOnInsert: { coverImage: `/${coverImagePath.replace(/\\/g, '/')}` } });
     // Or simpler: if album cover is null, set it.
     const album = await Album.findById(albumId);

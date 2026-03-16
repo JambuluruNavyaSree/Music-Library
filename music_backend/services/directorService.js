@@ -5,9 +5,12 @@ const getAllDirectors = async () => await MusicDirector.find();
 
 const findOrCreateDirector = async (name) => {
   if (!name) return null;
-  let director = await MusicDirector.findOne({ directorName: { $regex: new RegExp(`^${name}$`, 'i') } });
+  const normalized = name.trim();
+  let director = await MusicDirector.findOne({ 
+    directorName: { $regex: new RegExp(`^${normalized.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, 'i') } 
+  });
   if (!director) {
-    director = await MusicDirector.create({ directorName: name });
+    director = await MusicDirector.create({ directorName: normalized });
   }
   return director;
 };
