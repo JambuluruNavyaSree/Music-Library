@@ -251,13 +251,13 @@ const AdminSongs = () => {
               </div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: '16px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
               <div className="form-group">
-                <label style={{ display: 'block', marginBottom: '8px', fontSize: '11px', fontWeight: '600', marginLeft: '4px' }}>Audio File {editTarget && '(Opt)'}</label>
+                <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '600', marginLeft: '4px' }}>Audio File {editTarget && '(Opt)'}</label>
                 <div className="glass-input" style={{ position: 'relative', display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-                  <FiMusic style={{ marginRight: '8px', opacity: 0.5, flexShrink: 0 }} />
-                  <span style={{ fontSize: '10px', color: form.file ? 'white' : 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                    {form.file ? form.file.name : 'Music...'}
+                  <FiMusic style={{ marginRight: '12px', opacity: 0.5, flexShrink: 0 }} />
+                  <span style={{ fontSize: '13px', color: form.file ? 'white' : 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {form.file ? form.file.name : 'Select music file...'}
                   </span>
                   <input type="file" accept="audio/*" 
                     onChange={e => setForm({ ...form, file: e.target.files[0] })}
@@ -267,11 +267,11 @@ const AdminSongs = () => {
               </div>
               
               <div className="form-group">
-                <label style={{ display: 'block', marginBottom: '8px', fontSize: '11px', fontWeight: '600', marginLeft: '4px' }}>Song Cover</label>
+                <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '600', marginLeft: '4px' }}>Song Cover Art</label>
                 <div className="glass-input" style={{ position: 'relative', display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-                  <FiImage style={{ marginRight: '8px', opacity: 0.5, flexShrink: 0 }} />
-                  <span style={{ fontSize: '10px', color: form.coverFile ? 'white' : 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                    {form.coverFile ? form.coverFile.name : 'Cover...'}
+                  <FiImage style={{ marginRight: '12px', opacity: 0.5, flexShrink: 0 }} />
+                  <span style={{ fontSize: '13px', color: form.coverFile ? 'white' : 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {form.coverFile ? form.coverFile.name : 'Select cover image...'}
                   </span>
                   <input type="file" accept="image/*" 
                     onChange={e => setForm({ ...form, coverFile: e.target.files[0] })}
@@ -281,11 +281,11 @@ const AdminSongs = () => {
               </div>
 
               <div className="form-group">
-                <label style={{ display: 'block', marginBottom: '8px', fontSize: '11px', fontWeight: '600', marginLeft: '4px' }}>Dir. Photo</label>
+                <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '600', marginLeft: '4px' }}>Director Profile Photo</label>
                 <div className="glass-input" style={{ position: 'relative', display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-                  <FiImage style={{ marginRight: '8px', opacity: 0.5, flexShrink: 0 }} />
-                  <span style={{ fontSize: '10px', color: form.directorPhotoFile ? 'white' : 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                    {form.directorPhotoFile ? form.directorPhotoFile.name : 'Photo...'}
+                  <FiImage style={{ marginRight: '12px', opacity: 0.5, flexShrink: 0 }} />
+                  <span style={{ fontSize: '13px', color: form.directorPhotoFile ? 'white' : 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {form.directorPhotoFile ? form.directorPhotoFile.name : 'Upload director photo...'}
                   </span>
                   <input type="file" accept="image/*" 
                     onChange={e => setForm({ ...form, directorPhotoFile: e.target.files[0] })}
@@ -295,11 +295,11 @@ const AdminSongs = () => {
               </div>
 
               <div className="form-group">
-                <label style={{ display: 'block', marginBottom: '8px', fontSize: '11px', fontWeight: '600', marginLeft: '4px' }}>Art. Photos</label>
+                <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '600', marginLeft: '4px' }}>Artist Profile Photos</label>
                 <div className="glass-input" style={{ position: 'relative', display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-                  <FiImage style={{ marginRight: '8px', opacity: 0.5, flexShrink: 0 }} />
-                  <span style={{ fontSize: '10px', color: form.artistPhotos.length > 0 ? 'white' : 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                    {form.artistPhotos.length > 0 ? `${form.artistPhotos.length} files` : 'Select...'}
+                  <FiImage style={{ marginRight: '12px', opacity: 0.5, flexShrink: 0 }} />
+                  <span style={{ fontSize: '13px', color: form.artistPhotos.length > 0 ? 'white' : 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {form.artistPhotos.length > 0 ? `${form.artistPhotos.length} files selected` : 'Upload artist photos...'}
                   </span>
                   <input type="file" accept="image/*" multiple
                     onChange={e => setForm({ ...form, artistPhotos: Array.from(e.target.files) })}
@@ -309,8 +309,8 @@ const AdminSongs = () => {
               </div>
             </div>
             {form.artistPhotos.length > 0 && (
-              <p style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '-12px', marginLeft: '4px' }}>
-                Note: Photo order should match Artist names order.
+              <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '-12px', marginLeft: '4px' }}>
+                💡 Tip: Upload photos in the same order as the artist names (comma separated).
               </p>
             )}
 
