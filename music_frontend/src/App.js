@@ -20,6 +20,7 @@ import AdminArtists from './pages/AdminArtists.js';
 import AdminDirectors from './pages/AdminDirectors.js';
 import Artists from './pages/Artists.js';
 import Directors from './pages/Directors.js';
+import Albums from './pages/Albums.js';
 import { useAuth } from './context/AuthContext.js';
 
 // Dynamic document title based on logged-in user
@@ -61,6 +62,7 @@ const AppRoutes = () => {
       <Route path="/profile"       element={<ProtectedRoute><AppLayout><Profile /></AppLayout></ProtectedRoute>} />
       <Route path="/artists"       element={<ProtectedRoute><AppLayout><Artists /></AppLayout></ProtectedRoute>} />
       <Route path="/directors"     element={<ProtectedRoute><AppLayout><Directors /></AppLayout></ProtectedRoute>} />
+      <Route path="/albums"        element={<ProtectedRoute><AppLayout><Albums /></AppLayout></ProtectedRoute>} />
 
       <Route path="/admin/songs"     element={<AdminRoute><AppLayout><AdminSongs /></AppLayout></AdminRoute>} />
       <Route path="/admin/albums"    element={<AdminRoute><AppLayout><AdminAlbums /></AppLayout></AdminRoute>} />

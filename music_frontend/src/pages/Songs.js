@@ -30,9 +30,11 @@ const Songs = () => {
     const search = params.get('search')   || '';
     const artist = params.get('artist')   || '';
     const director = params.get('director') || '';
+    const album = params.get('album') || '';
     if (search)   setSearchQuery(search);
     if (artist)   setSelectedArtist(artist);
     if (director) setSelectedDirector(director);
+    if (album)    setSelectedAlbum(album);
   }, [location.search]);
 
   // Dropdown Options

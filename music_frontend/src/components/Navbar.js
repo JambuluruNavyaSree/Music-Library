@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.js';
-import { FiMusic, FiHome, FiShield, FiSearch, FiX, FiUsers, FiList, FiMic } from 'react-icons/fi';
+import { FiMusic, FiHome, FiShield, FiSearch, FiX, FiUsers, FiList, FiMic, FiDisc } from 'react-icons/fi';
 import NotificationBell from './NotificationBell.js';
 
 const Navbar = () => {
@@ -78,6 +78,7 @@ const Navbar = () => {
             <NavButton to="/"         icon={<FiHome />}  label="Home"       end />
             <NavButton to="/songs"    icon={<FiMusic />} label="All Songs"  />
             {!isAdmin && <NavButton to="/artists"   icon={<FiMic />}   label="Artists"    />}
+            {!isAdmin && <NavButton to="/albums"    icon={<FiDisc />}  label="Albums"     />}
             {!isAdmin && <NavButton to="/directors" icon={<FiUsers />} label="Directors"  />}
             {!isAdmin && <NavButton to="/playlists" icon={<FiList />}  label="Library"    />}
             {isAdmin  && <NavButton to="/admin/songs" icon={<FiShield />} label="Admin"  />}
