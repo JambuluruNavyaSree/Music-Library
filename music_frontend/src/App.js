@@ -15,6 +15,7 @@ import Playlists from './pages/Playlists.js';
 import PlaylistDetail from './pages/PlaylistDetail.js';
 import Profile from './pages/Profile.js';
 import AdminSongs from './pages/AdminSongs.js';
+import AdminDashboard from './pages/AdminDashboard.js';
 import AdminAlbums from './pages/AdminAlbums.js';
 import AdminArtists from './pages/AdminArtists.js';
 import AdminDirectors from './pages/AdminDirectors.js';
@@ -65,6 +66,7 @@ const AppRoutes = () => {
       <Route path="/directors"     element={<ProtectedRoute><AppLayout><Directors /></AppLayout></ProtectedRoute>} />
       <Route path="/albums"        element={<ProtectedRoute><AppLayout><Albums /></AppLayout></ProtectedRoute>} />
 
+      <Route path="/admin"           element={<AdminRoute><AppLayout><AdminDashboard /></AppLayout></AdminRoute>} />
       <Route path="/admin/songs"     element={<AdminRoute><AppLayout><AdminSongs /></AppLayout></AdminRoute>} />
       <Route path="/admin/albums"    element={<AdminRoute><AppLayout><AdminAlbums /></AppLayout></AdminRoute>} />
       <Route path="/admin/artists"   element={<AdminRoute><AppLayout><AdminArtists /></AppLayout></AdminRoute>} />

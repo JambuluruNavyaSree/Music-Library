@@ -49,6 +49,7 @@ const Sidebar = () => {
         {isAdmin && (
           <>
             <div className="nav-section-label" style={{ marginTop: 16 }}>Admin</div>
+            <NavItem to="/admin" end icon={<FiSettings />} label="Dashboard" />
             <NavItem to="/admin/songs" icon={<FiMusic />} label="Manage Songs" />
             <NavItem to="/admin/albums" icon={<FiDisc />} label="Manage Albums" />
             <NavItem to="/admin/artists" icon={<FiUsers />} label="Manage Artists" />
