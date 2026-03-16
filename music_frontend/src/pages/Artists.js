@@ -70,14 +70,20 @@ const Artists = () => {
             >
               {/* Avatar circle */}
               <div style={{
-                width: '80px', height: '80px', borderRadius: '50%',
-                background: 'var(--accent-gradient)',
+                width: '100px', height: '100px', borderRadius: '50%',
+                background: artist.artistPhoto ? 'none' : 'var(--accent-gradient)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 margin: '0 auto 16px',
-                fontSize: '28px', fontWeight: '800', color: 'white',
-                boxShadow: '0 8px 24px rgba(139,92,246,0.4)',
+                fontSize: '36px', fontWeight: '800', color: 'white',
+                boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
+                overflow: 'hidden',
+                border: '3px solid rgba(255,255,255,0.1)'
               }}>
-                {artist.artistName?.[0]?.toUpperCase() || <FiMic />}
+                {artist.artistPhoto ? (
+                  <img src={artist.artistPhoto} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                ) : (
+                  artist.artistName?.[0]?.toUpperCase() || <FiMic />
+                )}
               </div>
               <div style={{ fontWeight: '700', fontSize: '15px', wordBreak: 'break-word' }}>
                 {artist.artistName}

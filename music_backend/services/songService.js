@@ -5,6 +5,7 @@ const User = require('../models/User');
 const Artist = require('../models/Artist');
 const directorService = require('./directorService');
 const albumService = require('./albumService');
+const artistService = require('./artistService');
 const Album = require('../models/Album');
 
 // Find or create an artist by name
@@ -92,6 +93,16 @@ const resolveMetadata = async (data) => {
     const names = data.artistName.split(',').map(n => n.trim()).filter(Boolean);
     const artistDocs = await Promise.all(names.map(n => findOrCreateArtist(n)));
     resolvedArtistIds = artistDocs.filter(Boolean).map(a => a._id);
+
+    // Apply artist photos if provided
+    if (data.artistPhotoPaths && data.artistPhotoPaths.length > 0) {
+      for (let i = 0; i < artistDocs.length; i++) {
+        if (artistDocs[i] && data.artistPhotoPaths[i]) {
+          // Update photo if the artist doesn't have one yet or if explicitly provided
+          await artistService.updateArtistPhoto(artistDocs[i]._id, data.artistPhotoPaths[i]);
+        }
+      }
+    }
   }
 
   console.log('[resolveMetadata] Resolved:', { albumId, directorId, resolvedArtistIds });
@@ -141,13 +152,14 @@ const getSongById = async (id) => {
 };
 
 // Add new song and broadcast notification to ALL users
-const addSong = async (body, filePath, coverImagePath, directorPhotoPath, adminUserId) => {
+const addSong = async (body, filePath, coverImagePath, directorPhotoPath, artistPhotoPaths, adminUserId) => {
   if (!filePath) throw new Error('Song file is required');
 
   const { albumId, directorId, resolvedArtistIds } = await resolveMetadata({
     ...body,
     albumCoverPath: coverImagePath,
-    directorPhotoPath: directorPhotoPath
+    directorPhotoPath: directorPhotoPath,
+    artistPhotoPaths: artistPhotoPaths
   });
 
   if (!albumId || !directorId) {
@@ -216,11 +228,12 @@ const addSong = async (body, filePath, coverImagePath, directorPhotoPath, adminU
 };
 
 // Update song details
-const updateSong = async (id, data, filePath, coverImagePath, directorPhotoPath) => {
+const updateSong = async (id, data, filePath, coverImagePath, directorPhotoPath, artistPhotoPaths) => {
   const { albumId, directorId, resolvedArtistIds } = await resolveMetadata({
     ...data,
     albumCoverPath: coverImagePath,
-    directorPhotoPath: directorPhotoPath
+    directorPhotoPath: directorPhotoPath,
+    artistPhotoPaths: artistPhotoPaths
   });
   
   const updateFields = {};

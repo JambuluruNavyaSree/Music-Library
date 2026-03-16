@@ -34,12 +34,14 @@ router.post(
       const songFile      = req.files?.songFile?.[0];
       const coverFile     = req.files?.coverImage?.[0];
       const directorPhoto = req.files?.directorPhoto?.[0];
+      const artistPhotos  = req.files?.artistPhotos || [];
 
       const song = await songService.addSong(
         req.body,
         songFile ? songFile.path : null,
         coverFile ? coverFile.path : null,
         directorPhoto ? directorPhoto.path : null,
+        artistPhotos.map(f => f.path),
         req.user.id
       );
       res.status(201).json(song);
@@ -56,13 +58,15 @@ router.put('/:id', protect, adminOnly, uploadSongWithCover, async (req, res) => 
     const songFile      = req.files?.songFile?.[0];
     const coverFile     = req.files?.coverImage?.[0];
     const directorPhoto = req.files?.directorPhoto?.[0];
+    const artistPhotos  = req.files?.artistPhotos || [];
 
     const song = await songService.updateSong(
       req.params.id,
       req.body,
       songFile      ? songFile.path      : null,
       coverFile     ? coverFile.path     : null,
-      directorPhoto ? directorPhoto.path : null
+      directorPhoto ? directorPhoto.path : null,
+      artistPhotos.map(f => f.path)
     );
     res.json(song);
   } catch (err) {

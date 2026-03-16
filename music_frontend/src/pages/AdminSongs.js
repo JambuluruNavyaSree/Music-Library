@@ -17,7 +17,8 @@ const emptyForm = {
   releaseDate: '',
   file: null, 
   coverFile: null,
-  directorPhotoFile: null 
+  directorPhotoFile: null,
+  artistPhotos: [] 
 };
 
 const AdminSongs = () => {
@@ -58,7 +59,8 @@ const AdminSongs = () => {
       releaseDate: song.albumId?.releaseDate ? song.albumId.releaseDate.slice(0, 10) : '',
       file: null,
       coverFile: null,
-      directorPhotoFile: null
+      directorPhotoFile: null,
+      artistPhotos: []
     });
     setShowModal(true);
   };
@@ -82,6 +84,8 @@ const AdminSongs = () => {
       if (form.file) fd.append('songFile', form.file);
       if (form.coverFile) fd.append('coverImage', form.coverFile);
       if (form.directorPhotoFile) fd.append('directorPhoto', form.directorPhotoFile);
+      
+      form.artistPhotos.forEach(p => fd.append('artistPhotos', p));
 
       if (editTarget) {
         await updateSong(editTarget._id, fd);
@@ -247,13 +251,13 @@ const AdminSongs = () => {
               </div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: '16px' }}>
               <div className="form-group">
-                <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '600', marginLeft: '4px' }}>Audio File {editTarget && '(Opt)'}</label>
+                <label style={{ display: 'block', marginBottom: '8px', fontSize: '11px', fontWeight: '600', marginLeft: '4px' }}>Audio File {editTarget && '(Opt)'}</label>
                 <div className="glass-input" style={{ position: 'relative', display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-                  <FiMusic style={{ marginRight: '12px', opacity: 0.5, flexShrink: 0 }} />
-                  <span style={{ fontSize: '11px', color: form.file ? 'white' : 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                    {form.file ? form.file.name : 'Select music...'}
+                  <FiMusic style={{ marginRight: '8px', opacity: 0.5, flexShrink: 0 }} />
+                  <span style={{ fontSize: '10px', color: form.file ? 'white' : 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {form.file ? form.file.name : 'Music...'}
                   </span>
                   <input type="file" accept="audio/*" 
                     onChange={e => setForm({ ...form, file: e.target.files[0] })}
@@ -263,11 +267,11 @@ const AdminSongs = () => {
               </div>
               
               <div className="form-group">
-                <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '600', marginLeft: '4px' }}>Song Cover (Opt)</label>
+                <label style={{ display: 'block', marginBottom: '8px', fontSize: '11px', fontWeight: '600', marginLeft: '4px' }}>Song Cover</label>
                 <div className="glass-input" style={{ position: 'relative', display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-                  <FiImage style={{ marginRight: '12px', opacity: 0.5, flexShrink: 0 }} />
-                  <span style={{ fontSize: '11px', color: form.coverFile ? 'white' : 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                    {form.coverFile ? form.coverFile.name : 'Select cover...'}
+                  <FiImage style={{ marginRight: '8px', opacity: 0.5, flexShrink: 0 }} />
+                  <span style={{ fontSize: '10px', color: form.coverFile ? 'white' : 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {form.coverFile ? form.coverFile.name : 'Cover...'}
                   </span>
                   <input type="file" accept="image/*" 
                     onChange={e => setForm({ ...form, coverFile: e.target.files[0] })}
@@ -277,11 +281,11 @@ const AdminSongs = () => {
               </div>
 
               <div className="form-group">
-                <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '600', marginLeft: '4px' }}>Dir. Photo (Opt)</label>
+                <label style={{ display: 'block', marginBottom: '8px', fontSize: '11px', fontWeight: '600', marginLeft: '4px' }}>Dir. Photo</label>
                 <div className="glass-input" style={{ position: 'relative', display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-                  <FiImage style={{ marginRight: '12px', opacity: 0.5, flexShrink: 0 }} />
-                  <span style={{ fontSize: '11px', color: form.directorPhotoFile ? 'white' : 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                    {form.directorPhotoFile ? form.directorPhotoFile.name : 'Dir. photo...'}
+                  <FiImage style={{ marginRight: '8px', opacity: 0.5, flexShrink: 0 }} />
+                  <span style={{ fontSize: '10px', color: form.directorPhotoFile ? 'white' : 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {form.directorPhotoFile ? form.directorPhotoFile.name : 'Photo...'}
                   </span>
                   <input type="file" accept="image/*" 
                     onChange={e => setForm({ ...form, directorPhotoFile: e.target.files[0] })}
@@ -289,7 +293,26 @@ const AdminSongs = () => {
                   />
                 </div>
               </div>
+
+              <div className="form-group">
+                <label style={{ display: 'block', marginBottom: '8px', fontSize: '11px', fontWeight: '600', marginLeft: '4px' }}>Art. Photos</label>
+                <div className="glass-input" style={{ position: 'relative', display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+                  <FiImage style={{ marginRight: '8px', opacity: 0.5, flexShrink: 0 }} />
+                  <span style={{ fontSize: '10px', color: form.artistPhotos.length > 0 ? 'white' : 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {form.artistPhotos.length > 0 ? `${form.artistPhotos.length} files` : 'Select...'}
+                  </span>
+                  <input type="file" accept="image/*" multiple
+                    onChange={e => setForm({ ...form, artistPhotos: Array.from(e.target.files) })}
+                    style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer' }} 
+                  />
+                </div>
+              </div>
             </div>
+            {form.artistPhotos.length > 0 && (
+              <p style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '-12px', marginLeft: '4px' }}>
+                Note: Photo order should match Artist names order.
+              </p>
+            )}
 
             <div style={{ display: 'flex', gap: '16px', justifyContent: 'flex-end', marginTop: '12px' }}>
               <button className="btn btn-secondary" onClick={() => setShowModal(false)} style={{ padding: '14px 36px' }}>Cancel</button>
