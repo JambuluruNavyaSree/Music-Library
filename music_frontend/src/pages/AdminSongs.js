@@ -253,7 +253,7 @@ const AdminSongs = () => {
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
               <div className="form-group">
-                <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '600', marginLeft: '4px' }}>Audio File {editTarget && '(Opt)'}</label>
+                <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '600', marginLeft: '4px' }}>Audio file</label>
                 <div className="glass-input" style={{ position: 'relative', display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
                   <FiMusic style={{ marginRight: '12px', opacity: 0.5, flexShrink: 0 }} />
                   <span style={{ fontSize: '13px', color: form.file ? 'white' : 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
@@ -267,7 +267,7 @@ const AdminSongs = () => {
               </div>
               
               <div className="form-group">
-                <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '600', marginLeft: '4px' }}>Song Cover Art</label>
+                <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '600', marginLeft: '4px' }}>Album Cover</label>
                 <div className="glass-input" style={{ position: 'relative', display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
                   <FiImage style={{ marginRight: '12px', opacity: 0.5, flexShrink: 0 }} />
                   <span style={{ fontSize: '13px', color: form.coverFile ? 'white' : 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
@@ -281,7 +281,7 @@ const AdminSongs = () => {
               </div>
 
               <div className="form-group">
-                <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '600', marginLeft: '4px' }}>Director Profile Photo</label>
+                <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '600', marginLeft: '4px' }}>Director profile</label>
                 <div className="glass-input" style={{ position: 'relative', display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
                   <FiImage style={{ marginRight: '12px', opacity: 0.5, flexShrink: 0 }} />
                   <span style={{ fontSize: '13px', color: form.directorPhotoFile ? 'white' : 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
@@ -295,7 +295,7 @@ const AdminSongs = () => {
               </div>
 
               <div className="form-group">
-                <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '600', marginLeft: '4px' }}>Artist Profile Photos</label>
+                <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '600', marginLeft: '4px' }}>Artist photos</label>
                 <div className="glass-input" style={{ position: 'relative', display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
                   <FiImage style={{ marginRight: '12px', opacity: 0.5, flexShrink: 0 }} />
                   <span style={{ fontSize: '13px', color: form.artistPhotos.length > 0 ? 'white' : 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
