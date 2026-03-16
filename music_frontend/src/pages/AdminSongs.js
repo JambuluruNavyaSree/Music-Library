@@ -158,7 +158,7 @@ const AdminSongs = () => {
                 <tr>
                   <th style={{ padding: '20px 24px', fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)' }}>Song</th>
                   <th style={{ padding: '20px 24px', fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)' }}>Artist</th>
-                  <th style={{ padding: '20px 24px', fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)' }}>Album</th>
+                  <th style={{ padding: '20px 24px', fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)' }}>Music Director</th>
                   <th style={{ padding: '20px 24px', fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)' }}>Status</th>
                   <th style={{ padding: '20px 24px', fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)', textAlign: 'right' }}>Actions</th>
                 </tr>

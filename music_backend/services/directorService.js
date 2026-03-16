@@ -20,9 +20,20 @@ const getAllDirectors = async () => {
 const findOrCreateDirector = async (name) => {
   if (!name) return null;
   const normalized = name.trim();
+  
+  // Create a regex-friendly version that ignores dots and extra spaces
+  // e.g. "Mickey J. Meyer" or "Mickey J Meyer" -> "Mickey J Meyer"
+  const searchPattern = normalized
+    .replace(/\./g, '')           // Remove dots
+    .replace(/\s+/g, ' ')         // Normalize spaces
+    .split(' ')                   // Split into words
+    .map(word => word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')) // Escape regex chars
+    .join('[\\s.]*');             // Allow optional dots/spaces between words
+
   let director = await MusicDirector.findOne({ 
-    directorName: { $regex: new RegExp(`^${normalized.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, 'i') } 
+    directorName: { $regex: new RegExp(`^${searchPattern}$`, 'i') } 
   });
+
   if (!director) {
     director = await MusicDirector.create({ directorName: normalized });
   }
