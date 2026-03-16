@@ -27,7 +27,7 @@ const getAllAlbums = async () => {
   return enhanced;
 };
 
-const findOrCreateAlbum = async (albumName, directorName, fallbackCover = null) => {
+const findOrCreateAlbum = async (albumName, directorName, fallbackCover = null, releaseDate = null) => {
   if (!albumName) return null;
   
   // Resolve director first if name provided
@@ -39,9 +39,9 @@ const findOrCreateAlbum = async (albumName, directorName, fallbackCover = null) 
 
   let album = await Album.findOne({ albumName: { $regex: new RegExp(`^${albumName}$`, 'i') } });
   if (!album) {
-    album = await Album.create({ albumName, directorId, coverImage: fallbackCover });
+    album = await Album.create({ albumName, directorId, coverImage: fallbackCover, releaseDate });
   } else {
-    // Update existing album if it didn't have a director or cover
+    // Update existing album if it didn't have a director, cover, or release date
     let changed = false;
     if (directorId && !album.directorId) {
       album.directorId = directorId;
@@ -49,6 +49,10 @@ const findOrCreateAlbum = async (albumName, directorName, fallbackCover = null) 
     }
     if (fallbackCover && !album.coverImage) {
       album.coverImage = fallbackCover;
+      changed = true;
+    }
+    if (releaseDate && !album.releaseDate) {
+      album.releaseDate = releaseDate;
       changed = true;
     }
     if (changed) await album.save();

@@ -7,7 +7,18 @@ import { FiPlus, FiEdit2, FiTrash2, FiEye, FiEyeOff, FiSearch, FiX, FiMusic, FiI
 import toast from 'react-hot-toast';
 import Modal from '../components/Modal.js';
 
-const emptyForm = { songName: '', albumId: '', artistId: [], artistName: '', directorId: '', duration: '', file: null, coverFile: null };
+const emptyForm = { 
+  songName: '', 
+  albumId: '', 
+  artistId: [], 
+  artistName: '', 
+  directorId: '', 
+  duration: '', 
+  releaseDate: '',
+  file: null, 
+  coverFile: null,
+  directorPhotoFile: null 
+};
 
 const AdminSongs = () => {
   const [songs, setSongs] = useState([]);
@@ -44,7 +55,10 @@ const AdminSongs = () => {
       artistName: song.artistId?.map(a => a.artistName).join(', ') || '',
       directorId: song.directorId?.directorName || '',
       duration: song.duration || '',
-      file: null
+      releaseDate: song.albumId?.releaseDate ? song.albumId.releaseDate.slice(0, 10) : '',
+      file: null,
+      coverFile: null,
+      directorPhotoFile: null
     });
     setShowModal(true);
   };
@@ -62,9 +76,12 @@ const AdminSongs = () => {
       fd.append('directorId', form.directorId);
       if (form.artistName) fd.append('artistName', form.artistName);
       if (form.duration) fd.append('duration', form.duration);
+      if (form.releaseDate) fd.append('releaseDate', form.releaseDate);
+      
       form.artistId.forEach(id => fd.append('artistId', id));
       if (form.file) fd.append('songFile', form.file);
       if (form.coverFile) fd.append('coverImage', form.coverFile);
+      if (form.directorPhotoFile) fd.append('directorPhoto', form.directorPhotoFile);
 
       if (editTarget) {
         await updateSong(editTarget._id, fd);
@@ -210,22 +227,32 @@ const AdminSongs = () => {
               </div>
             </div>
 
-            <div className="form-group">
-              <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '600', marginLeft: '4px' }}>Artist Name</label>
-              <input
-                type="text" className="glass-input" style={{ width: '100%' }}
-                placeholder="Enter artist name"
-                value={form.artistName}
-                onChange={e => setForm({ ...form, artistName: e.target.value })}
-              />
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+              <div className="form-group">
+                <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '600', marginLeft: '4px' }}>Artist Name</label>
+                <input
+                  type="text" className="glass-input" style={{ width: '100%' }}
+                  placeholder="Enter artist name"
+                  value={form.artistName}
+                  onChange={e => setForm({ ...form, artistName: e.target.value })}
+                />
+              </div>
+              <div className="form-group">
+                <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '600', marginLeft: '4px' }}>Release Date</label>
+                <input
+                  type="date" className="glass-input" style={{ width: '100%' }}
+                  value={form.releaseDate}
+                  onChange={e => setForm({ ...form, releaseDate: e.target.value })}
+                />
+              </div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' }}>
               <div className="form-group">
                 <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '600', marginLeft: '4px' }}>Audio File {editTarget && '(Opt)'}</label>
                 <div className="glass-input" style={{ position: 'relative', display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
                   <FiMusic style={{ marginRight: '12px', opacity: 0.5, flexShrink: 0 }} />
-                  <span style={{ fontSize: '13px', color: form.file ? 'white' : 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  <span style={{ fontSize: '11px', color: form.file ? 'white' : 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     {form.file ? form.file.name : 'Select music...'}
                   </span>
                   <input type="file" accept="audio/*" 
@@ -236,14 +263,28 @@ const AdminSongs = () => {
               </div>
               
               <div className="form-group">
-                <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '600', marginLeft: '4px' }}>Cover Image (Opt)</label>
+                <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '600', marginLeft: '4px' }}>Song Cover (Opt)</label>
                 <div className="glass-input" style={{ position: 'relative', display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
                   <FiImage style={{ marginRight: '12px', opacity: 0.5, flexShrink: 0 }} />
-                  <span style={{ fontSize: '13px', color: form.coverFile ? 'white' : 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  <span style={{ fontSize: '11px', color: form.coverFile ? 'white' : 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     {form.coverFile ? form.coverFile.name : 'Select cover...'}
                   </span>
                   <input type="file" accept="image/*" 
                     onChange={e => setForm({ ...form, coverFile: e.target.files[0] })}
+                    style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer' }} 
+                  />
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '600', marginLeft: '4px' }}>Dir. Photo (Opt)</label>
+                <div className="glass-input" style={{ position: 'relative', display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+                  <FiImage style={{ marginRight: '12px', opacity: 0.5, flexShrink: 0 }} />
+                  <span style={{ fontSize: '11px', color: form.directorPhotoFile ? 'white' : 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {form.directorPhotoFile ? form.directorPhotoFile.name : 'Dir. photo...'}
+                  </span>
+                  <input type="file" accept="image/*" 
+                    onChange={e => setForm({ ...form, directorPhotoFile: e.target.files[0] })}
                     style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer' }} 
                   />
                 </div>

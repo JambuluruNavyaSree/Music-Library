@@ -34,11 +34,13 @@ const directorStorage = createStorage('directors', (req) => {
     : 'director';
 });
 
-// ── Custom storage that routes songFile→songs/ and coverImage→covers/ ────────
+// ── Custom storage that routes songFile→songs/, coverImage→covers/, directorPhoto→directors/ ──
 const songWithCoverStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     if (file.fieldname === 'coverImage') {
       cb(null, 'uploads/covers');
+    } else if (file.fieldname === 'directorPhoto') {
+      cb(null, 'uploads/directors');
     } else {
       cb(null, 'uploads/songs');
     }
@@ -52,11 +54,11 @@ const songWithCoverStorage = multer.diskStorage({
   }
 });
 
-// File type filter — audio for songFile, image for coverImage
+// File type filter — audio for songFile, image for coverImage/directorPhoto
 const songWithCoverFilter = (req, file, cb) => {
-  if (file.fieldname === 'coverImage') {
+  if (file.fieldname === 'coverImage' || file.fieldname === 'directorPhoto') {
     if (file.mimetype.startsWith('image/')) cb(null, true);
-    else cb(new Error('Cover must be an image file'), false);
+    else cb(new Error(`${file.fieldname === 'coverImage' ? 'Cover' : 'Director photo'} must be an image file`), false);
   } else {
     if (file.mimetype.startsWith('audio/')) cb(null, true);
     else cb(new Error('Song must be an audio file'), false);
@@ -68,13 +70,14 @@ exports.uploadSong     = multer({ storage: songStorage });
 exports.uploadArtist   = multer({ storage: artistStorage });
 exports.uploadDirector = multer({ storage: directorStorage });
 
-// Combined upload: songFile→uploads/songs, coverImage→uploads/covers
+// Combined upload: songFile, coverImage, directorPhoto
 exports.uploadSongWithCover = multer({
   storage: songWithCoverStorage,
   fileFilter: songWithCoverFilter
 }).fields([
-  { name: 'songFile',    maxCount: 1 },
-  { name: 'coverImage',  maxCount: 1 }
+  { name: 'songFile',      maxCount: 1 },
+  { name: 'coverImage',    maxCount: 1 },
+  { name: 'directorPhoto', maxCount: 1 }
 ]);
 
 // Album cover upload

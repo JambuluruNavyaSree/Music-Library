@@ -28,7 +28,8 @@ const resolveMetadata = async (data) => {
     albumId: data.albumId, 
     albumName: data.albumName, 
     directorId: data.directorId, 
-    directorName: data.directorName 
+    directorName: data.directorName,
+    releaseDate: data.releaseDate
   });
 
   // 1. Resolve Director
@@ -45,17 +46,35 @@ const resolveMetadata = async (data) => {
     }
   }
 
+  // If a photo was uploaded, update the director
+  if (directorId && data.directorPhotoPath) {
+    await directorService.updateDirectorPhoto(directorId, data.directorPhotoPath);
+  }
+
   // 2. Resolve Album
   if (data.albumName) {
-    const album = await albumService.findOrCreateAlbum(data.albumName, data.directorName || data.directorId);
+    const album = await albumService.findOrCreateAlbum(
+      data.albumName, 
+      data.directorName || data.directorId,
+      data.albumCoverPath,
+      data.releaseDate
+    );
     albumId = album?._id;
     if (!directorId && album?.directorId) directorId = album.directorId;
   } else if (data.albumId) {
     if (isValidId(data.albumId)) {
       albumId = data.albumId;
+      if (data.releaseDate) {
+        await albumService.updateAlbum(albumId, { releaseDate: data.releaseDate });
+      }
     } else {
       // It's a name passed in the ID field
-      const album = await albumService.findOrCreateAlbum(data.albumId, data.directorName || data.directorId);
+      const album = await albumService.findOrCreateAlbum(
+        data.albumId, 
+        data.directorName || data.directorId,
+        data.albumCoverPath,
+        data.releaseDate
+      );
       albumId = album?._id;
       if (!directorId && album?.directorId) directorId = album.directorId;
     }
@@ -116,10 +135,14 @@ const getSongById = async (id) => {
 };
 
 // Add new song and broadcast notification to ALL users
-const addSong = async (body, filePath, coverImagePath, adminUserId) => {
+const addSong = async (body, filePath, coverImagePath, directorPhotoPath, adminUserId) => {
   if (!filePath) throw new Error('Song file is required');
 
-  const { albumId, directorId, resolvedArtistIds } = await resolveMetadata(body);
+  const { albumId, directorId, resolvedArtistIds } = await resolveMetadata({
+    ...body,
+    albumCoverPath: coverImagePath,
+    directorPhotoPath: directorPhotoPath
+  });
 
   if (!albumId || !directorId) {
     throw new Error(`Failed to resolve Album (${body.albumId || body.albumName}) or Director (${body.directorId || body.directorName}) to a valid ID. Please ensure they exist or are named correctly.`);
@@ -188,8 +211,12 @@ const addSong = async (body, filePath, coverImagePath, adminUserId) => {
 };
 
 // Update song details
-const updateSong = async (id, data, filePath, coverImagePath) => {
-  const { albumId, directorId, resolvedArtistIds } = await resolveMetadata(data);
+const updateSong = async (id, data, filePath, coverImagePath, directorPhotoPath) => {
+  const { albumId, directorId, resolvedArtistIds } = await resolveMetadata({
+    ...data,
+    albumCoverPath: coverImagePath,
+    directorPhotoPath: directorPhotoPath
+  });
   
   const updateFields = {};
   if (data.songName)   updateFields.songName = data.songName;

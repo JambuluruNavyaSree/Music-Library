@@ -31,12 +31,15 @@ router.post(
   uploadSongWithCover,
   async (req, res) => {
     try {
-      const songFile  = req.files?.songFile?.[0];
-      const coverFile = req.files?.coverImage?.[0];
+      const songFile      = req.files?.songFile?.[0];
+      const coverFile     = req.files?.coverImage?.[0];
+      const directorPhoto = req.files?.directorPhoto?.[0];
+
       const song = await songService.addSong(
         req.body,
         songFile ? songFile.path : null,
         coverFile ? coverFile.path : null,
+        directorPhoto ? directorPhoto.path : null,
         req.user.id
       );
       res.status(201).json(song);
@@ -50,13 +53,16 @@ router.post(
 // Admin: Update song (supports new audio file + new cover image)
 router.put('/:id', protect, adminOnly, uploadSongWithCover, async (req, res) => {
   try {
-    const songFile  = req.files?.songFile?.[0];
-    const coverFile = req.files?.coverImage?.[0];
+    const songFile      = req.files?.songFile?.[0];
+    const coverFile     = req.files?.coverImage?.[0];
+    const directorPhoto = req.files?.directorPhoto?.[0];
+
     const song = await songService.updateSong(
       req.params.id,
       req.body,
-      songFile  ? songFile.path  : null,
-      coverFile ? coverFile.path : null
+      songFile      ? songFile.path      : null,
+      coverFile     ? coverFile.path     : null,
+      directorPhoto ? directorPhoto.path : null
     );
     res.json(song);
   } catch (err) {
