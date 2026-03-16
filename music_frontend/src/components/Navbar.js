@@ -1,15 +1,22 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { NavLink, Link, useNavigate } from 'react-router-dom';
+import { NavLink, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.js';
-import { FiMusic, FiHome, FiShield, FiSearch, FiX, FiUsers, FiList, FiMic, FiDisc } from 'react-icons/fi';
+import { FiMusic, FiHome, FiShield, FiSearch, FiX, FiUsers, FiList, FiMic, FiDisc, FiMenu } from 'react-icons/fi';
 import NotificationBell from './NotificationBell.js';
 
 const Navbar = () => {
   const { user, isAdmin } = useAuth();
   const [showSearch, setShowSearch] = useState(false);
   const [query, setQuery]           = useState('');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const inputRef = useRef(null);
+
+  // Close menu when route changes
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [location.pathname]);
 
   useEffect(() => {
     if (showSearch && inputRef.current) inputRef.current.focus();
@@ -31,25 +38,37 @@ const Navbar = () => {
       position: 'fixed', top: 0, left: 0, right: 0,
       height: 'var(--nav-height)',
       display: 'flex', alignItems: 'center',
-      padding: '0 32px',
+      padding: '0 24px',
       justifyContent: 'space-between', gap: '16px',
       zIndex: 1100,
     }}>
 
-      {/* ── LOGO ── */}
-      <Link to="/" style={{
-        fontSize: '20px', fontWeight: '800',
-        fontFamily: 'var(--font-display)',
-        textDecoration: 'none', color: 'white',
-        display: 'flex', alignItems: 'center', gap: '8px',
-        flexShrink: 0,
-      }}>
-        <span className="text-gradient">◈</span> MusicLib
-      </Link>
+      {/* ── LEFT: Hamburger & LOGO ── */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexShrink: 0 }}>
+        <button 
+          onClick={() => setIsMenuOpen(true)}
+          style={{ 
+            background: 'transparent', border: 'none', color: 'white', 
+            cursor: 'pointer', display: 'flex', alignItems: 'center', 
+            justifyContent: 'center', fontSize: '24px', padding: '4px' 
+          }}
+          title="Menu"
+        >
+          <FiMenu />
+        </button>
+        <Link to="/" style={{
+          fontSize: '20px', fontWeight: '800',
+          fontFamily: 'var(--font-display)',
+          textDecoration: 'none', color: 'white',
+          display: 'flex', alignItems: 'center', gap: '8px',
+        }}>
+          <span className="text-gradient">◈</span> <span className="hide-on-mobile">MusicLib</span>
+        </Link>
+      </div>
 
-      {/* ── CENTER: Nav links OR Inline Search ── */}
+      {/* ── CENTER: Search ── */}
       <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        {showSearch ? (
+        {showSearch && (
           <form onSubmit={submitSearch} style={{ width: '100%', maxWidth: '500px', display: 'flex', gap: '8px' }}>
             <div style={{ flex: 1, position: 'relative' }}>
               <FiSearch style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)', fontSize: '16px' }} />
@@ -70,19 +89,9 @@ const Navbar = () => {
                 }}
               />
             </div>
-            <button type="submit" style={{ padding: '0 20px', borderRadius: '14px', fontSize: '14px', fontWeight: '700', background: 'var(--accent-gradient)', border: 'none', color: 'white', cursor: 'pointer' }}>Go</button>
-            <button type="button" onClick={closeSearch} style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)', color: 'var(--text-secondary)', width: '38px', height: '38px', borderRadius: '12px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><FiX /></button>
+            <button type="submit" style={{ padding: '0 20px', borderRadius: '14px', fontSize: '14px', fontWeight: '700', background: 'var(--accent-gradient)', border: 'none', color: 'white', cursor: 'pointer' }} className="hide-on-mobile">Go</button>
+            <button type="button" onClick={closeSearch} style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)', color: 'var(--text-secondary)', width: '38px', height: '38px', borderRadius: '12px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}><FiX /></button>
           </form>
-        ) : (
-          <div style={{ display: 'flex', gap: '4px' }}>
-            <NavButton to="/"         icon={<FiHome />}  label="Home"       end />
-            <NavButton to="/songs"    icon={<FiMusic />} label="All Songs"  />
-            {!isAdmin && <NavButton to="/artists"   icon={<FiMic />}   label="Artists"    />}
-            {!isAdmin && <NavButton to="/albums"    icon={<FiDisc />}  label="Albums"     />}
-            {!isAdmin && <NavButton to="/directors" icon={<FiUsers />} label="Directors"  />}
-            {!isAdmin && <NavButton to="/playlists" icon={<FiList />}  label="Library"    />}
-            {isAdmin  && <NavButton to="/admin" icon={<FiShield />} label="Admin"  />}
-          </div>
         )}
       </div>
 
@@ -121,8 +130,41 @@ const Navbar = () => {
         </Link>
 
         {/* Role badge */}
-        <div style={{ fontSize: '10px', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.06em', background: 'rgba(255,255,255,0.06)', padding: '4px 10px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.08)' }}>
+        <div className="hide-on-mobile" style={{ fontSize: '10px', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.06em', background: 'rgba(255,255,255,0.06)', padding: '4px 10px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.08)' }}>
           {isAdmin ? 'Admin' : 'Member'}
+        </div>
+      </div>
+
+      {/* ── SIDE DRAWER MENU ── */}
+      <div 
+        className={`drawer-overlay ${isMenuOpen ? 'open' : ''}`} 
+        onClick={() => setIsMenuOpen(false)}
+      />
+      <div className={`drawer-menu ${isMenuOpen ? 'open' : ''}`}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px', paddingBottom: '16px', borderBottom: '1px solid var(--glass-border)' }}>
+          <span style={{ fontSize: '18px', fontWeight: '800', fontFamily: 'var(--font-display)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span className="text-gradient">◈</span> Menu
+          </span>
+          <button 
+            onClick={() => setIsMenuOpen(false)}
+            style={{ background: 'transparent', border: 'none', color: 'white', cursor: 'pointer', fontSize: '20px' }}
+          >
+            <FiX />
+          </button>
+        </div>
+        
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <NavButton to="/"         icon={<FiHome />}  label="Home"       end />
+          <NavButton to="/songs"    icon={<FiMusic />} label="All Songs"  />
+          {!isAdmin && <NavButton to="/artists"   icon={<FiMic />}   label="Artists"    />}
+          {!isAdmin && <NavButton to="/albums"    icon={<FiDisc />}  label="Albums"     />}
+          {!isAdmin && <NavButton to="/directors" icon={<FiUsers />} label="Directors"  />}
+          {!isAdmin && <NavButton to="/playlists" icon={<FiList />}  label="Library"    />}
+          {isAdmin  && <NavButton to="/admin" icon={<FiShield />} label="Admin"  />}
+          
+          <div style={{ marginTop: '24px', paddingTop: '16px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+            <NavButton to="/profile" icon={<FiUsers />} label="My Profile" />
+          </div>
         </div>
       </div>
     </nav>
@@ -132,18 +174,10 @@ const Navbar = () => {
 const NavButton = ({ to, icon, label, end }) => (
   <NavLink
     to={to} end={end}
-    style={({ isActive }) => ({
-      display: 'flex', alignItems: 'center', gap: '6px',
-      padding: '8px 14px', borderRadius: '12px',
-      fontSize: '14px', fontWeight: '600',
-      textDecoration: 'none',
-      color: isActive ? 'white' : 'var(--text-secondary)',
-      background: isActive ? 'rgba(255, 255, 255, 0.1)' : 'transparent',
-      transition: 'all 0.2s',
-    })}
+    className={({ isActive }) => `drawer-nav-item ${isActive ? 'active' : ''}`}
   >
-    <span style={{ display: 'flex', fontSize: '16px' }}>{icon}</span>
-    <span>{label}</span>
+    <span className="nav-icon" style={{ display: 'flex', fontSize: '20px', width: '24px', justifyContent: 'center' }}>{icon}</span>
+    <span style={{ fontSize: '16px', fontWeight: '600' }}>{label}</span>
   </NavLink>
 );
 
