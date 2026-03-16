@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAlbums } from '../services/api.js';
-import { FiDisc } from 'react-icons/fi';
+import { FiDisc, FiHeadphones } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 
 const Albums = () => {
@@ -96,8 +96,13 @@ const Albums = () => {
               <div style={{ fontWeight: '700', fontSize: '17px', marginBottom: '6px', wordBreak: 'break-word', color: 'white' }}>
                 {album.albumName}
               </div>
-              <div style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>
-                {album.directorId?.directorName ? `🎬 ${album.directorId.directorName}` : 'Various Artists'}
+              <div style={{ fontSize: '13px', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                {album.directorId?.directorName ? (
+                  <>
+                    <FiHeadphones style={{ marginRight: '6px', opacity: 0.8 }} />
+                    {album.directorId.directorName}
+                  </>
+                ) : 'Various Artists'}
               </div>
               {album.releaseDate && (
                 <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '4px' }}>
