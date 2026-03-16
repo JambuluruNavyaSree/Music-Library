@@ -53,6 +53,7 @@ const Sidebar = () => {
             <NavItem to="/admin/albums" icon={<FiDisc />} label="Manage Albums" />
             <NavItem to="/admin/artists" icon={<FiUsers />} label="Manage Artists" />
             <NavItem to="/admin/directors" icon={<FiSettings />} label="Music Directors" />
+            <NavItem to="/admin/users" icon={<FiUsers />} label="Manage Users" />
           </>
         )}
       </nav>

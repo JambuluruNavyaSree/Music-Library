@@ -35,6 +35,8 @@ export const deleteSong           = (id)     => API.delete(`/songs/${id}`);
 export const toggleSongVisibility = (id)     => API.patch(`/songs/${id}/visibility`);
 export const recordPlay           = (id)     => API.post(`/songs/${id}/play`);
 export const getPlayHistory       = ()       => API.get('/users/play-history');
+export const getUsers             = ()       => API.get('/users/admin/all');
+export const toggleUserRole       = (id)     => API.patch(`/users/admin/toggle-role/${id}`);
 
 // Albums
 export const getAlbums    = ()           => API.get('/albums');
