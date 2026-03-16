@@ -26,9 +26,9 @@ const Directors = () => {
 
       {/* Header */}
       <div style={{ marginBottom: '40px' }}>
-        <h1 style={{ fontSize: 'clamp(32px, 5vw, 42px)', marginBottom: '8px' }}>Directors</h1>
+        <h1 style={{ fontSize: 'clamp(32px, 5vw, 42px)', marginBottom: '8px' }}>Music Directors</h1>
         <p style={{ color: 'var(--text-secondary)', fontSize: '16px' }}>
-          {directors.length} directors · click to browse their songs
+          {directors.length} music directors · click to browse their songs
         </p>
       </div>
 
@@ -36,7 +36,7 @@ const Directors = () => {
       <div style={{ marginBottom: '32px', maxWidth: '400px', position: 'relative' }}>
         <input
           type="text"
-          placeholder="Search directors…"
+          placeholder="Search music directors…"
           value={search}
           onChange={e => setSearch(e.target.value)}
           className="glass-input"

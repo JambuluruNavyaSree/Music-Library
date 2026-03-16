@@ -281,7 +281,7 @@ const AdminSongs = () => {
               </div>
 
               <div className="form-group">
-                <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '600', marginLeft: '4px' }}>Director profile</label>
+                <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '600', marginLeft: '4px' }}>Music Director profile</label>
                 <div className="glass-input" style={{ position: 'relative', display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
                   <FiImage style={{ marginRight: '12px', opacity: 0.5, flexShrink: 0 }} />
                   <span style={{ fontSize: '13px', color: form.directorPhotoFile ? 'white' : 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
