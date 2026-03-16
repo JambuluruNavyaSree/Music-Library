@@ -81,7 +81,7 @@ const Navbar = () => {
             {!isAdmin && <NavButton to="/albums"    icon={<FiDisc />}  label="Albums"     />}
             {!isAdmin && <NavButton to="/directors" icon={<FiUsers />} label="Directors"  />}
             {!isAdmin && <NavButton to="/playlists" icon={<FiList />}  label="Library"    />}
-            {isAdmin  && <NavButton to="/admin/songs" icon={<FiShield />} label="Admin"  />}
+            {isAdmin  && <NavButton to="/admin" icon={<FiShield />} label="Admin"  />}
           </div>
         )}
       </div>
