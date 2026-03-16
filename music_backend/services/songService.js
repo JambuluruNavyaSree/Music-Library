@@ -94,12 +94,33 @@ const resolveMetadata = async (data) => {
     const artistDocs = await Promise.all(names.map(n => findOrCreateArtist(n)));
     resolvedArtistIds = artistDocs.filter(Boolean).map(a => a._id);
 
-    // Apply artist photos if provided
+    // Apply artist photos with Smart Matching
     if (data.artistPhotoPaths && data.artistPhotoPaths.length > 0) {
+      const photos = [...data.artistPhotoPaths]; // { path, originalName }
+      const assignedPhotoIndices = new Set();
+
       for (let i = 0; i < artistDocs.length; i++) {
-        if (artistDocs[i] && data.artistPhotoPaths[i]) {
-          // Update photo if the artist doesn't have one yet or if explicitly provided
-          await artistService.updateArtistPhoto(artistDocs[i]._id, data.artistPhotoPaths[i]);
+        const artist = artistDocs[i];
+        if (!artist) continue;
+
+        const cleanArtistName = artist.artistName.toLowerCase().replace(/[^a-z0-9]/g, '');
+        
+        // 1. Try smart match based on filename
+        let matchIndex = photos.findIndex((p, idx) => {
+          if (assignedPhotoIndices.has(idx)) return false;
+          const cleanFileName = p.originalName.toLowerCase().split('.')[0].replace(/[^a-z0-9]/g, '');
+          return cleanFileName.includes(cleanArtistName) || cleanArtistName.includes(cleanFileName);
+        });
+
+        // 2. Fallback to index-based match if no smart match found and index is available
+        if (matchIndex === -1 && i < photos.length && !assignedPhotoIndices.has(i)) {
+          matchIndex = i;
+        }
+
+        if (matchIndex !== -1) {
+          await artistService.updateArtistPhoto(artist._id, photos[matchIndex].path);
+          assignedPhotoIndices.add(matchIndex);
+          console.log(`[SmartMatch] Matched artist "${artist.artistName}" with photo "${photos[matchIndex].originalName}"`);
         }
       }
     }

@@ -41,7 +41,7 @@ router.post(
         songFile ? songFile.path : null,
         coverFile ? coverFile.path : null,
         directorPhoto ? directorPhoto.path : null,
-        artistPhotos.map(f => f.path),
+        artistPhotos.map(f => ({ path: f.path, originalName: f.originalname })),
         req.user.id
       );
       res.status(201).json(song);
@@ -66,7 +66,7 @@ router.put('/:id', protect, adminOnly, uploadSongWithCover, async (req, res) => 
       songFile      ? songFile.path      : null,
       coverFile     ? coverFile.path     : null,
       directorPhoto ? directorPhoto.path : null,
-      artistPhotos.map(f => f.path)
+      artistPhotos.map(f => ({ path: f.path, originalName: f.originalname }))
     );
     res.json(song);
   } catch (err) {

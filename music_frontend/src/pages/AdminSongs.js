@@ -296,7 +296,7 @@ const AdminSongs = () => {
 
               <div className="form-group">
                 <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', fontWeight: '600', marginLeft: '4px' }}>Artist photos</label>
-                <div className="glass-input" style={{ position: 'relative', display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+                <div className="glass-input" style={{ position: 'relative', display: 'flex', alignItems: 'center', cursor: 'pointer', marginBottom: form.artistPhotos.length > 0 ? '12px' : 0 }}>
                   <FiImage style={{ marginRight: '12px', opacity: 0.5, flexShrink: 0 }} />
                   <span style={{ fontSize: '13px', color: form.artistPhotos.length > 0 ? 'white' : 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     {form.artistPhotos.length > 0 ? `${form.artistPhotos.length} files selected` : 'Upload artist photos...'}
@@ -306,11 +306,21 @@ const AdminSongs = () => {
                     style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer' }} 
                   />
                 </div>
+                {form.artistPhotos.length > 0 && (
+                  <div style={{ padding: '8px 12px', background: 'rgba(255,255,255,0.03)', borderRadius: '10px', fontSize: '11px', color: 'var(--text-secondary)' }}>
+                    <div style={{ fontWeight: '600', marginBottom: '4px', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '4px' }}>Selected Files:</div>
+                    {form.artistPhotos.map((p, idx) => (
+                      <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', opacity: 0.8 }}>
+                        <span>• {p.name}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
             {form.artistPhotos.length > 0 && (
-              <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '-12px', marginLeft: '4px' }}>
-                💡 Tip: Upload photos in the same order as the artist names (comma separated).
+              <p style={{ fontSize: '12px', color: 'var(--accent-light)', marginTop: '-12px', marginLeft: '4px' }}>
+                ✨ Smart Match: Photos named after the artist (e.g., "hesham.jpg") will be matched automatically!
               </p>
             )}
 
