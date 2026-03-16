@@ -153,6 +153,18 @@ const addSong = async (body, filePath, coverImagePath, adminUserId) => {
     coverImage: coverImagePath ? `/${coverImagePath.replace(/\\/g, '/')}` : null
   });
 
+  // If album doesn't have a cover, use this song's cover as a sticky fallback
+  if (coverImagePath) {
+    const Album = require('../models/Album');
+    await Album.findByIdAndUpdate(albumId, { $setOnInsert: { coverImage: `/${coverImagePath.replace(/\\/g, '/')}` } });
+    // Or simpler: if album cover is null, set it.
+    const album = await Album.findById(albumId);
+    if (album && !album.coverImage) {
+      album.coverImage = `/${coverImagePath.replace(/\\/g, '/')}`;
+      await album.save();
+    }
+  }
+
   // Broadcast logic
   try {
     const allUsers = await User.find({}, '_id');

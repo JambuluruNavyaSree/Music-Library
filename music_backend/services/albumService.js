@@ -1,21 +1,33 @@
 const mongoose = require('mongoose');
 const Album = require('../models/Album');
+const Song = require('../models/Song');
 const directorService = require('./directorService');
 
 const getAllAlbums = async () => {
   const albums = await Album.find().populate('directorId');
-  return albums.map(a => {
+  
+  // Enhance albums with song covers if missing
+  const enhanced = await Promise.all(albums.map(async (a) => {
     const obj = a.toObject();
+    
+    // If no album cover, try to find a song in this album that has one
+    if (!obj.coverImage) {
+      const songWithCover = await Song.findOne({ albumId: a._id, coverImage: { $ne: null } });
+      if (songWithCover) obj.coverImage = songWithCover.coverImage;
+    }
+
     if (obj.coverImage) {
       const ci = obj.coverImage.replace(/\\/g, '/');
       const cleanCI = ci.startsWith('/') ? ci : `/${ci}`;
       obj.coverImage = encodeURI(cleanCI);
     }
     return obj;
-  });
+  }));
+  
+  return enhanced;
 };
 
-const findOrCreateAlbum = async (albumName, directorName) => {
+const findOrCreateAlbum = async (albumName, directorName, fallbackCover = null) => {
   if (!albumName) return null;
   
   // Resolve director first if name provided
@@ -27,11 +39,19 @@ const findOrCreateAlbum = async (albumName, directorName) => {
 
   let album = await Album.findOne({ albumName: { $regex: new RegExp(`^${albumName}$`, 'i') } });
   if (!album) {
-    album = await Album.create({ albumName, directorId });
-  } else if (directorId && !album.directorId) {
-    // Update existing album if it didn't have a director
-    album.directorId = directorId;
-    await album.save();
+    album = await Album.create({ albumName, directorId, coverImage: fallbackCover });
+  } else {
+    // Update existing album if it didn't have a director or cover
+    let changed = false;
+    if (directorId && !album.directorId) {
+      album.directorId = directorId;
+      changed = true;
+    }
+    if (fallbackCover && !album.coverImage) {
+      album.coverImage = fallbackCover;
+      changed = true;
+    }
+    if (changed) await album.save();
   }
   return album;
 };
