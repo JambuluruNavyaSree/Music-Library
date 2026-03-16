@@ -70,14 +70,20 @@ const Directors = () => {
             >
               {/* Avatar circle */}
               <div style={{
-                width: '80px', height: '80px', borderRadius: '50%',
-                background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
+                width: '100px', height: '100px', borderRadius: '50%',
+                background: director.directorPhoto ? 'none' : 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 margin: '0 auto 16px',
-                fontSize: '28px', fontWeight: '800', color: 'white',
-                boxShadow: '0 8px 24px rgba(59,130,246,0.4)',
+                fontSize: '36px', fontWeight: '800', color: 'white',
+                boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
+                overflow: 'hidden',
+                border: '3px solid rgba(255,255,255,0.1)'
               }}>
-                {director.directorName?.[0]?.toUpperCase() || <FiUsers />}
+                {director.directorPhoto ? (
+                  <img src={director.directorPhoto} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                ) : (
+                  director.directorName?.[0]?.toUpperCase() || <FiUsers />
+                )}
               </div>
               <div style={{ fontWeight: '700', fontSize: '15px', wordBreak: 'break-word' }}>
                 {director.directorName}
