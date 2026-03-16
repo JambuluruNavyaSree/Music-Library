@@ -38,8 +38,8 @@ export const getPlayHistory       = ()       => API.get('/users/play-history');
 
 // Albums
 export const getAlbums    = ()           => API.get('/albums');
-export const createAlbum  = (data)       => API.post('/albums', data);
-export const updateAlbum  = (id, data)   => API.put(`/albums/${id}`, data);
+export const createAlbum  = (data)       => API.post('/albums', data, { headers: { 'Content-Type': 'multipart/form-data' } });
+export const updateAlbum  = (id, data)   => API.put(`/albums/${id}`, data, { headers: { 'Content-Type': 'multipart/form-data' } });
 export const deleteAlbum  = (id)         => API.delete(`/albums/${id}`);
 
 // Artists
